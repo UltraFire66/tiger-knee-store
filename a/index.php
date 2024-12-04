@@ -51,18 +51,21 @@
    
     <div class="formulario">
 
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-        <div class="titulo-form">
-            <h1 style="display: flex; justify-content: center">Login</h1>
-            <img style="width: 5vw; height: 10vh" src="logo.gif" alt=""/>
-        </div>
-        
-            <div class="inputs">
-                Login: <input type="text" name="login"><br>
-                Senha: <input type="password" name="senha"><br>
-                <button type="submit" name=btn-entrar>Entrar</button>
+        <div style="display: flex; flex-direction: row; align-items: center; ">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+            <div class="titulo-form">
+                <h1 style="display: flex; justify-content: center">Login</h1>
             </div>
-        </form>
+            
+                <div class="inputs">
+                    Login: <input type="text" name="login"><br>
+                    Senha: <input type="password" name="senha"><br>
+                    <button type="submit" name=btn-entrar>Entrar</button>
+                </div>
+            </form>
+
+            <img style="width: 10vw; height: 20vh; margin-left: 20px" src="logo.gif" alt=""/>
+        </div>
         <a href="cadastro.php">Cadastre-se</a>
         <?php 
         if(!empty($erros)):
