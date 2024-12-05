@@ -1,0 +1,26 @@
+
+.titulo-form{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formulario{
+    
+    margin-top: 30vh;
+    background-color:rgba(245, 245, 220, 0.7);
+    
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    height: 40vh;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4vh;
+}
+
+.formulario input{
+
+    margin: 20px 0px 20px 0px; 
+
+}

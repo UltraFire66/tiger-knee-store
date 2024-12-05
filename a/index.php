@@ -1,5 +1,5 @@
 <?php
-    require_once 'serverConnection.php';
+    require_once 'pags/serverConnection.php';
     session_start ();
     if(isset ($_POST['btn-entrar'])):
         $erros = array();
@@ -33,7 +33,7 @@
 ?>
 
 <?php 
-    $wallpapers = array("sf6background.jpg", "background-login.jpg");
+    $wallpapers = array("figures/sf6background.jpg","figures/escorpio.jpg","figures/narutofoda.jpg","figures/mk.jpg","figures/sonico.jpg", "figures/vegetafodaa.jpg", "figures/vegetafodaa2.jpg", "figures/dmc4background.jpg");
     $wallpaper = $wallpapers[array_rand($wallpapers)];
 
 ?>
@@ -43,11 +43,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"  href="login.css" />
+    <link rel="stylesheet"  href="styles/login.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body background="<?php echo $wallpaper; ?>">
+<body style = "
+    background-image: url(<?php echo $wallpaper; ?>);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    ">
    
     <div class="formulario">
 
@@ -56,7 +65,7 @@
             <div class="titulo-form">
                 <h1 style="display: flex; justify-content: center">Login</h1>
             </div>
-            
+
                 <div class="inputs">
                     Login: <input type="text" name="login"><br>
                     Senha: <input type="password" name="senha"><br>
@@ -66,7 +75,7 @@
 
             <img style="width: 10vw; height: 20vh; margin-left: 20px" src="logo.gif" alt=""/>
         </div>
-        <a href="cadastro.php">Cadastre-se</a>
+        <a href="pags/cadastro.php">Cadastre-se</a>
         <?php 
         if(!empty($erros)):
             foreach($erros as $erro):
