@@ -8,19 +8,19 @@
             if($_POST['login'] == "" or $_POST['senha'] == ""):
                 $erros[] = "<li>O campo login / senha precisa ser preenchido.</li>";
             else :
-                $sql = "SELECT login FROM login WHERE login = '$login'";
+                $sql = "SELECT login FROM usuarios WHERE login = '$login'";
                 $resultado = mysqli_query ($connect, $sql );
                 if( mysqli_num_rows ($resultado) > 0):
                     // Existe um registro com o login que foi informado
                     $senha2 = md5($senha);
-                    $sql = "SELECT * FROM login WHERE login = '$login' AND senha = '$senha2'";
+                    $sql = "SELECT * FROM usuarios WHERE login = '$login' AND senha = '$senha2'";
                     $resultado = mysqli_query($connect, $sql);
                     mysqli_close($connect);
                         if(mysqli_num_rows($resultado) == 1):
                             $dados = mysqli_fetch_array ($resultado);
                             $_SESSION ['logado'] = true ;
                             $_SESSION ['id_usuario'] = $dados ['id'];
-                            header('Location:home.php');
+                            header('Location:pags/home.php');
                         else :
                             $erros[] = "<li>Usuário e senha não conferem.</li>";
                         endif;
@@ -73,7 +73,7 @@
                 </div>
             </form>
 
-            <img style="width: 10vw; height: 20vh; margin-left: 20px" src="logo.gif" alt=""/>
+            <img style="width: 10vw; height: 20vh; margin-left: 20px" src="figures/logo.gif" alt=""/>
         </div>
         <a href="pags/cadastro.php">Cadastre-se</a>
         <?php 
