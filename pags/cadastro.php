@@ -26,12 +26,12 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
  if(empty($login) or empty($senha) or empty($nome)):
  $erros[] = "<li>Os campos nome/login/senha precisam ser preenchidos.</li>";
  else:
- $sql = "SELECT login FROM usuarios WHERE login = '$loginDB'";
+ $sql = "SELECT email FROM usuario WHERE email = '$loginDB'";
  $resultado = mysqli_query($connect, $sql);
  if(mysqli_num_rows($resultado) > 0):
  $erros[] = "<li>Esse login já existe.</li>";
  else:
- $sqlInsert = "INSERT INTO usuarios(nome,login,senha) VALUES ('$nome',
+ $sqlInsert = "INSERT INTO usuario(nome,email,senha) VALUES ('$nome',
  '$login','$senha')";
  $insert = mysqli_query($connect, $sqlInsert); 
  if($insert){
