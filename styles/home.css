@@ -1,0 +1,26 @@
+body{
+
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+
+.card{
+
+    display: flex;
+    justify-content: center;
+    
+    flex-direction: column;
+    height: 20vh;
+    width: 20vw;
+    
+    
+}
+
+.imagem{
+
+    width: 20vw;
+    height: 15vh;
+
+}

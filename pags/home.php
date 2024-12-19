@@ -13,12 +13,32 @@
     $dados = mysqli_fetch_array($resultado);
     mysqli_close($connect);
 ?>
+
+<?php
+
+
+
+$xml = file_get_contents('https://store.steampowered.com/api/appdetails?appids=587620');
+$resultado = json_decode($xml, true);
+
+?>
+
+
+
 <html>
     <head>
         <title>Página restrita</title>
+        <link rel="stylesheet"  href="../styles/home.css" />
     </head>
     <body>
-        <h1 >Olá <?php echo $dados ['nome']; ?></h1 >
+        
+        <div class="card">
+            <img class = "imagem" src = <?php echo $resultado[587620]["data"]["header_image"]?>>
+
+            <p style = "font-size: 20px;"><?php echo $resultado[587620]["data"]["name"]?></p>
+            <p> <?php echo $resultado[587620]["data"]["genres"][0]["description"]?> </p>
+        </div>
+
         <a href ="../index.php ">Sair</a>
     </body>
 </html>
