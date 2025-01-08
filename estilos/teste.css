@@ -1,0 +1,27 @@
+body{
+    background-color: #fcf7d1;
+}
+
+#cabecalho{
+    width: 100vw;
+    height: 50%;
+  
+    display: flex;
+
+    justify-content: center;
+}
+
+.img1-sinopse{
+    display: flex;
+    flex-direction: row;
+}
+
+.img1{
+    width: 25%;
+    height: 50%;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
