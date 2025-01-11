@@ -17,6 +17,8 @@ body{
 }
 
 .img1{
+    width: 25%;
+    height: 50%;
     margin-top: 10vh;
     display: flex;
     flex-direction: column;
