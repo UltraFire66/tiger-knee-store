@@ -20,6 +20,9 @@
 ?>
 <?php
     
+    $jogo = json_decode(file_get_contents('https://store.steampowered.com/api/appdetails?appids=10'),true);
+    
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +35,7 @@
 
     <title>Jogo</title>
 </head>
-<body style="background-color: #fcf7d1">
+<body style="background-color: #fcf7d1; margin: 0; padding: 0;">
     <div style = "display: <?php echo $display?>; position: absolute;
             background-color: white;
             border-radius: 30px;
@@ -95,8 +98,8 @@
 
         </div>
         
-        <div id="cabecalho" style="display: flex; height: 25%; width:100%;">
-            <img src="../figures/silenthill2.png" alt="Cabeçalho">
+        <div id="cabecalho" style="display: flex; height: 35%; width:100%; ">
+            <img src=<?php echo $jogo['10']['data']['header_image']?> style = "width:90%" alt="Cabeçalho">
         </div>
 
         <div class="img1-sinopse">

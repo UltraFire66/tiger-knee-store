@@ -75,7 +75,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     height: 100vh;
     width: 100vw;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     justify-content: center;
      background-size: cover;
@@ -122,7 +122,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
         <p style = "font-size: 50px;">cadastro concluído!</p>
         <img style="width: 10vw; height: 20vh; margin-left: 20px;" src="../figures/zangiefVictoryAnimation.webp"  />
         <button onclick="location.href = '../index.php';">voltar</button>
-    </div></div>
+    </div>
 </body>
 </html>
 

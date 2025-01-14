@@ -16,8 +16,8 @@
 
 <?php
 
- $ids = array("1126190","39140","813780","366250","254460","587620","12200","323470", "220");
-
+ $ids = array("1126190","39140",/*"813780","366250","254460","587620","12200","323470", "220"*/);
+ $_SESSION['idsJogos'] = $ids;
  $jogos = array();
   foreach ($ids as $id){
     $link = 'https://store.steampowered.com/api/appdetails?appids='.$id;
@@ -33,7 +33,7 @@
 
 <html>
     <head>
-        <title>Página restrita</title>
+        <title>Loja</title>
         <link rel="stylesheet"  href="../estilos/home.css" />
     </head>
     <body style = "max-width: 100vw">
@@ -69,14 +69,28 @@
             <div style = "background-color: #A9A17A;  height: 83vh; width: 17vw; display: flex; justify-content: center; font-size: 30px">
                 <p> Filtros</p>
             </div>
-            <div style="display: flex; flex-direction: column" >
-                <div style = "width = 83vw , height: 8vh; display: flex; align-items: center; justify-content: center; background-color: green"> 
-                    <input type="text" id = "pesquisar" style = "border: 10px; border-radius: 5px; border-color: black">
+      
+            <div style="display: flex; flex-direction: column; min-width: 83vw" >
+                <div style = " height: 7vh; display: flex; align-items: center; justify-content: center; margin-top: 20px"> 
+                    <div style = "width: 28vw ; height: 5vh; background-color: #444444; display: flex; align-items: center; border-radius: 15px">
+                        <form method = "POST" style = "display: flex; align-items: center;">
+                            <input type="text" id = "pesquisar" name = "pesquisar" style = "margin-top: 10px;margin-left: 10px; border-radius: 5px; height: 3vh; width: 20vw; background-color: #A9A17A">
+                            <button style = "margin-left: 15px; margin-top: 10px" type = "submit"> <img src = "../figures/lupa.png" style = "width: 2vw; height: 3vh;"> </img></button>
+                        </form>
+                        
+                    </div>
+                    
+                    
+
+
                 </div>
                 <div style = "width = 83vw , height: 83vh , background-color: blue ; display: grid; grid-template-columns: auto auto auto auto auto">
                     <?php
                     $pos = 0;
                     foreach($jogos as  $jogo){
+                        
+                        
+
                         $posicao = $ids[$pos];
                         $imagem_capa = $jogo[$posicao]["data"]["header_image"];
                         $nome = $jogo[$posicao]["data"]["name"];
@@ -89,9 +103,50 @@
                         $p[sizeof($p) - 3] = ",";
                         $preco = implode("",$p);
                         $pos = $pos + 1;
+                        
+                        if(isset($_POST['pesquisar'])){
+                            if(strpos(strtolower($nome),strtolower($_POST['pesquisar'])) !== false){
+                                echo <<<card
+                                <div class="card" style = "
+                                display: flex;
+                                justify-content: center;
+        
+                                margin-top: 4vh;
+                                margin-left: 3vw;
+        
+                                flex-direction: column;
+                                height: 28.5vh;
+                                width: 12vw;
+                                box-shadow: 10px 10px 5px gray;
+        
+                                ">
+                                    <img class = "imagem-capa" style = "width: auto; height: auto" src = $imagem_capa>
+                                    
+                                        <div style = "margin-left: 15px">
+                                            <p style = "font-size: 15px; align-self: center; margin-top: 3px"> $nome</p>
+                                            <p style = "font-size: 10px;  align-self: center; margin-top: -14px">  $genero</p>
+                                        </div>
+                                        
+                                        <img style = "width: 8vw; height: 5vh; align-self: center; margin-top: -7px; margin-bottom: 7px" class = "imagem" src = "../figures/rate.png">
+                            
+                                    
+                                    <div style = "background-color: green; width: 100%; height: auto; display: flex; justify-content: center">
+                                    <p style = "font-size: 25px; margin-top: 3px; margin-bottom: 3px; "> R$ $preco</p>
+                                    </div>
+                                    
+                                </div>
+                            card;
+                                
+                            }
+                        }
+                        
 
-                    echo <<<card
-                    <div class="card" style = "
+                        else{
+                            
+                            
+
+                        echo <<<card
+                        <div class="card" style = "
                         display: flex;
                         justify-content: center;
 
@@ -119,8 +174,11 @@
                             </div>
                             
                         </div>
-                    card;
+                        card;
+                        }
                     }
+                       
+                        
                     
                     ?>
                 </div>
