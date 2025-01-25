@@ -1,4 +1,19 @@
 <?php
+    require_once 'serverConnection.php';
+    session_start ();
+    if(isset($_POST['btn-aval'])){
+        $avaliacao = mysqli_escape_string ($connect, $_POST['aval']);
+        if($_POST['aval'] != "" ){
+            $sql = "INSERT INTO interacao (codigo, idjogo, nota, comentario, idUsuario) values (1, 2, 3, '$avaliacao', 5);";
+            $r = mysqli_query($connect, $sql);
+        }   
+    }
+?>
+
+
+
+
+<?php
     
     if(!isset($display)){
         $display = "none";
@@ -28,7 +43,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"  href="../styles/teste.css"/>
+    <link rel="stylesheet"  href="teste.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -49,17 +64,19 @@
             z-index: 2;
             background-color: #444444;
             ">
-           <div style="display: flex; width: 28vw; align-items: center; margin-top: 15px">
+           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" style="display: flex; justify-content: center; flex-direction: column; align-items:center;">
+                <div style="display: flex; width: 28vw;  align-items: center; margin-top: 15px">
                     <p style="margin-left: 0px; font-size:50px;">Avaliação</p>
-            </div>
-            <div style="display: flex; background-color: #fcf7d1; width: 28vw; height: 30vh; margin-top: 30px; border-radius: 30px; justify-content: center; align-items: center;">
-                <div style="display: flex;  border-radius: 30px; width: 25vw; height: 27vh; background-color:#A9A17A; justify-content: center; align-items: center;">
-                    <textarea style="display: flex; background-color:#A9A17A; width: 23vw; height: 25vh; resize: none; outline: 0; border: 0;"></textarea>
                 </div>
-            </div>
-            <div style="margin-top: 30px; width: 20vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
-                <a href= "jogo.php?id=0" style="background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;">Avaliar</a>
-            </div>
+                <div style="display: flex; background-color: #fcf7d1; width: 28vw; height: 30vh; margin-top: 30px; border-radius: 30px; justify-content: center; align-items: center;">
+                    <div style="display: flex;  border-radius: 30px; width: 25vw; height: 27vh; background-color:#A9A17A; justify-content: center; align-items: center;">
+                        <textarea type="text" id="aval" name="aval" style="display: flex; background-color:#A9A17A; width: 23vw; height: 25vh; resize: none; outline: 0; border: 0;"></textarea>
+                    </div>
+                </div>
+                <div style="margin-top: 30px; width: 20vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
+                    <input type="submit" name="btn-aval" style="border: 0; background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;" value="Avaliar">
+                </div>
+            </form>
     </div>
     
     <div class="fundoBlur" style = "
@@ -71,7 +88,7 @@
     filter: <?php echo $blur?>;
     z-index: 1;
     ">
-        <div style = "background-color: #8C0005;
+        <div style = "background-color:  #8C0005;
         width: 100%;
         height: 17vh;
         display: flex;
@@ -105,7 +122,24 @@
         <div class="img1-sinopse">
             <div class ="img1" style="min-width: 30%; min-height: 30%; margin-left: 10vw; ">
                 <img src="<?php echo $jogo['323470']['data']['header_image']?>" alt="Imagem à esquerda" width="70%" height="70%">
-                <img src="../figures/rate.png" alt="Imagem à esquerda" width="70%" height="70%">
+                <div class = "rating">
+
+                    <input value = "5" name = "rate" id = "star5" type = "radio">
+                    <label title =  "text" for = "star5"></label>
+
+                    <input value = "4" name = "rate" id = "star4" type = "radio">
+                    <label title =  "text" for = "star4"></label>
+
+                    <input value = "3" name = "rate" id = "star3" type = "radio">
+                    <label title =  "text" for = "star3"></label>
+
+                    <input value = "2" name = "rate" id = "star2" type = "radio">
+                    <label title =  "text" for = "star2"></label>
+
+                    <input value = "1" name = "rate" id = "star1" type = "radio">
+                    <label title =  "text" for = "star1"></label>
+
+                </div>
             </div>
             <div class="sinopse" style="margin-top: 10vh; margin-left: 0vw; margin-right: 10vw; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <p style="font-size:20px"> <?php echo $jogo['323470']['data']['detailed_description']?> </p>

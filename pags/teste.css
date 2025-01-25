@@ -26,7 +26,11 @@ body{
     align-items: center;
 }
 
-
+.rating{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
 
 .rating:not(:checked) > input {
 	position:absolute;
@@ -34,11 +38,11 @@ body{
 }
 
 .rating:not(:checked) > label {
-
+    
 	cursor: pointer;
 	font-size: 35px;
 	color: #666;
-    display: 'inline-block';
+
 }
 
 .rating:not(:checked) > label:before {
