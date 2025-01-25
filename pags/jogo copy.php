@@ -20,7 +20,7 @@
 ?>
 <?php
     
-    $jogo = json_decode(file_get_contents('https://store.steampowered.com/api/appdetails?appids=323470'),true);
+    $jogo = json_decode(file_get_contents('https://store.steampowered.com/api/appdetails?appids=10'),true);
     
 
 ?>
@@ -35,7 +35,7 @@
 
     <title>Jogo</title>
 </head>
-<body style="background-color: #fcf7d1; margin: 0; padding: 0; overflow-x: hidden;" >
+<body style="background-color: #fcf7d1; margin: 0; padding: 0;">
     <div style = "display: <?php echo $display?>; position: absolute;
             background-color: white;
             border-radius: 30px;
@@ -99,21 +99,21 @@
         </div>
         
         <div id="cabecalho" style="display: flex; height: 35%; width:100%; ">
-            <img src=<?php echo $jogo['323470']['data']['screenshots'][1]['path_full']?> style = "width:90%" alt="Cabeçalho">
+            <img src=<?php echo $jogo['10']['data']['header_image']?> style = "width:90%" alt="Cabeçalho">
         </div>
 
         <div class="img1-sinopse">
             <div class ="img1" style="min-width: 30%; min-height: 30%; margin-left: 10vw; ">
-                <img src="<?php echo $jogo['323470']['data']['header_image']?>" alt="Imagem à esquerda" width="70%" height="70%">
+                <img src="../figures/silenthill2.png" alt="Imagem à esquerda" width="70%" height="70%">
                 <img src="../figures/rate.png" alt="Imagem à esquerda" width="70%" height="70%">
             </div>
             <div class="sinopse" style="margin-top: 10vh; margin-left: 0vw; margin-right: 10vw; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <p style="font-size:20px"> <?php echo $jogo['323470']['data']['detailed_description']?> </p>
+                <p style="font-size:20px"> Vivencie uma verdadeira aula de terror psicológico com este jogo, aclamado como o melhor da série, no hardware mais atual com visuais sinistros e sons de arrepiar.Assuma o papel de James Sunderland e explore a quase deserta cidade de Silent Hill neste muito aguardado remake do clássico de 2001. Atraído até este lugar misterioso por uma carta de sua esposa, que morreu há três anos, James vasculha a cidade atrás de vestígios dela.Entre num mundo onírico e se depare com monstros perversos, o ameaçador Pyramid Head e um elenco de personagens aparentemente comuns que tentam lidar com o passado.À medida que James aceita sua instabilidade, uma pergunta ainda restará: qual o verdadeiro motivo para ele vir a Silent Hill?</p>
             </div>
         </div>
         
         <div class="carrossel" style = "display: flex; justify-content: center; margin-top: 10vh">
-            <div id="carouselExampleIndicators" class="carousel slide" style = "width: 50%; height: 50%;">
+            <div id="carouselExampleIndicators" class="carousel slide" style = "width: 30%; height: 30%;">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -121,13 +121,13 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][0]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="../figures/silenthill2.png" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][2]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="../figures/silenthill2.png" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][3]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="../figures/silenthill2.png" class="d-block w-100" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
