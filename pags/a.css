@@ -1,0 +1,130 @@
+body{
+    background-color: #fcf7d1;
+}
+
+#cabecalho{
+    width: 100vw;
+    height: 50%;
+  
+    display: flex;
+
+    justify-content: center;
+}
+
+.img1-sinopse{
+    display: flex;
+    flex-direction: row;
+}
+
+.img1{
+    width: 25%;
+    height: 50%;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.rating{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
+
+.rating:not(:checked) > input {
+	position:absolute;
+	appearance: none;
+}
+
+.rating:not(:checked) > label {
+    
+	cursor: pointer;
+	font-size: 35px;
+	color: #666;
+
+}
+
+.rating:not(:checked) > label:before {
+	content: '★';
+}
+
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label { color: #e58e09; }
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {color: #ff9e0b;}
+
+
+.rating > input:checked ~ label{
+	color: #ffa723;
+}
+
+.rating2{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
+
+.rating2:not(:checked) > input {
+	position:absolute;
+	appearance: none; 
+}
+
+.rating2:not(:checked) > label {
+    
+	cursor: pointer;
+	font-size: 35px;
+	color: #666;
+
+}
+
+.rating2:not(:checked) > label:before {
+	content: '★';
+}
+
+
+.rating2 > input:checked + label:hover,
+.rating2 > input:checked + label:hover ~ label,
+.rating2 > input:checked ~ label:hover,
+.rating2 > input:checked ~ label:hover ~ label,
+.rating2 > label:hover ~ input:checked ~ label { color: #e58e09; }
+
+.rating2:not(:checked) > label:hover,
+.rating2:not(:checked) > label:hover ~ label {color: #ff9e0b;}
+
+
+.rating2 > input:checked ~ label{
+	color: #ffa723;
+}
+
+.ratingComentario{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
+
+.ratingComentario:not(:checked) > input {
+	position:absolute;
+	appearance: none; 
+}
+
+.ratingComentario:not(:checked) > label {
+    
+	cursor: pointer;
+	font-size: 35px;
+	color: #666;
+
+}
+
+.ratingComentario:not(:checked) > label:before {
+	content: '★';
+}
+
+.ratingComentario > input:checked ~ label{
+	color: #ffa723;
+}

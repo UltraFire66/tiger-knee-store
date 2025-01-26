@@ -18,33 +18,33 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
  require_once 'serverConnection.php';
  session_start();
  if(isset($_POST['btn-cadastrar'])):
- $erros = array();
- $loginDB = mysqli_escape_string($connect, $_POST['login']);
- $nome = $_POST["nome"];
- $login = $_POST["login"];
- $senha = MD5($_POST["senha"]);
+    $erros = array();
+    $loginDB = mysqli_escape_string($connect, $_POST['login']);
+    $nome = $_POST["nome"];
+    $login = $_POST["login"];
+    $senha = MD5($_POST["senha"]);
  if(empty($login) or empty($senha) or empty($nome)):
- $erros[] = "<li>Os campos nome/login/senha precisam ser preenchidos.</li>";
- else:
- $sql = "SELECT email FROM usuario WHERE email = '$loginDB'";
- $resultado = mysqli_query($connect, $sql);
- if(mysqli_num_rows($resultado) > 0):
- $erros[] = "<li>Esse login já existe.</li>";
- else:
- $sqlInsert = "INSERT INTO usuario(nome,email,senha) VALUES ('$nome',
- '$login','$senha')";
- $insert = mysqli_query($connect, $sqlInsert); 
- if($insert){
-    $display = "flex";
-    $blur = "blur(5px)";
+    $erros[] = "<li>Os campos nome/login/senha precisam ser preenchidos.</li>";
+    else:
+        $sql = "SELECT email FROM usuario WHERE email = '$loginDB'";
+        $resultado = mysqli_query($connect, $sql);
+        if(mysqli_num_rows($resultado) > 0):
+            $erros[] = "<li>Esse login já existe.</li>";
+        else:
+            $sqlInsert = "INSERT INTO usuario(nome,email,senha) VALUES ('$nome',
+            '$login','$senha')";
+            $insert = mysqli_query($connect, $sqlInsert); 
+    if($insert){
+        $display = "flex";
+        $blur = "blur(5px)";
     }
-    else{
-    $erros[] = "<li>Não foi possível cadastrar o usuário.
-    Tente novamente.</li>";
-    }
-    endif;
-    endif;
-    endif;
+        else{
+            $erros[] = "<li>Não foi possível cadastrar o usuário.
+            Tente novamente.</li>";
+        }
+        endif;
+        endif;
+        endif;
     ?>
 
 

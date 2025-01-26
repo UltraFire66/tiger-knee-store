@@ -1,12 +1,30 @@
 <?php
     require_once 'serverConnection.php';
     session_start ();
-    if(isset($_POST['btn-aval'])){
+    /*if(!isset($_SESSION['logado'])):
+        header('Location: ../index.php');
+    endif;*/
+    $id = $_SESSION['id_usuario'];
+    $banana="banana";
+    if(isset($_POST['btn-aval']) && isset($_SESSION['logado'])){
+        $id = $_SESSION['id_usuario'];
         $avaliacao = mysqli_escape_string ($connect, $_POST['aval']);
-        if($_POST['aval'] != "" ){
-            $sql = "INSERT INTO interacao (codigo, idjogo, nota, comentario, idUsuario) values (1, 2, 3, '$avaliacao', 5);";
-            $r = mysqli_query($connect, $sql);
-        }   
+        if(isset($_POST['rate'])){
+            $nota = $_POST['rate'];
+        }else{
+            $nota=0;
+        }
+        $sql_insert = "INSERT INTO interacao (idjogo, nota, comentario, idUsuario) values (2, $nota, '$avaliacao', $id);";
+        $sql_update = "UPDATE interacao SET nota=$nota, comentario='$avaliacao', idUsuario=$id WHERE (idUsuario = $id and idjogo=2);";
+        $sql_select = "SELECT * FROM interacao WHERE (idUsuario = $id and idjogo=2);";
+        $r=mysqli_query($connect, $sql_select);
+        $dados = mysqli_fetch_array($r);
+        //var_dump($dados);
+        if($dados == NULL){ 
+            mysqli_query($connect, $sql_insert);
+        }else{
+            mysqli_query($connect, $sql_update);
+        }                                                                               
     }
 ?>
 
@@ -43,7 +61,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"  href="teste.css"/>
+    <link rel="stylesheet"  href="a.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -61,12 +79,30 @@
             filter: blur(0px);
             width: 30vw;
             height: 60vh;
-            z-index: 2;
+            z-index: 3;
             background-color: #444444;
             ">
            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" style="display: flex; justify-content: center; flex-direction: column; align-items:center;">
                 <div style="display: flex; width: 28vw;  align-items: center; margin-top: 15px">
                     <p style="margin-left: 0px; font-size:50px;">Avaliação</p>
+                    <div class = "rating" style="margin-left: 5vw; margin-bottom: 1vh;" >
+
+                        <input value = "5" name = "rate" id = "star5" type = "radio">
+                        <label title =  "text" for = "star5"></label>
+
+                        <input value = "4" name = "rate" id = "star4" type = "radio">
+                        <label title =  "text" for = "star4"></label>
+
+                        <input value = "3" name = "rate" id = "star3" type = "radio">
+                        <label title =  "text" for = "star3"></label>
+
+                        <input value = "2" name = "rate" id = "star2" type = "radio">
+                        <label title =  "text" for = "star2"></label>
+
+                        <input value = "1" name = "rate" id = "star1" type = "radio">
+                        <label title =  "text" for = "star1"></label>
+
+                    </div>
                 </div>
                 <div style="display: flex; background-color: #fcf7d1; width: 28vw; height: 30vh; margin-top: 30px; border-radius: 30px; justify-content: center; align-items: center;">
                     <div style="display: flex;  border-radius: 30px; width: 25vw; height: 27vh; background-color:#A9A17A; justify-content: center; align-items: center;">
@@ -122,23 +158,54 @@
         <div class="img1-sinopse">
             <div class ="img1" style="min-width: 30%; min-height: 30%; margin-left: 10vw; ">
                 <img src="<?php echo $jogo['323470']['data']['header_image']?>" alt="Imagem à esquerda" width="70%" height="70%">
-                <div class = "rating">
+                <div class = "ratingComentario">
+                        <?php
+                            $resSoma = mysqli_fetch_array(mysqli_query($connect, "SELECT SUM(nota) from interacao;"));
+                            $resCount = mysqli_fetch_array(mysqli_query($connect, "SELECT COUNT(nota) from interacao;"));
+                            //var_dump($resSoma);
+                            //var_dump($resCount);
+                            $media = $resSoma[0]/$resCount[0];
+                            $notaMedia = intval($media);
+                            //var_dump($notaMedia);
+                            $st1 = "";
+                            $st2 = "";
+                            $st3 = "";
+                            $st4 = "";
+                            $st5 = "";
+                            switch($notaMedia){
+                                case 1: 
+                                    $st1 = "checked"; 
+                                    break;
+                                case 2: 
+                                    $st2 = "checked"; 
+                                    break;
+                                case 3: 
+                                    $st3 = "checked"; 
+                                    break;
+                                case 4: 
+                                    $st4 = "checked"; 
+                                    break;
+                                case 5: 
+                                    $st5 = "checked"; 
+                                    break;
+                            }
+                            echo<<<notaJogo
+                                <input value = "5" name = "rate2" id = "star15" type = "radio" $st5>
+                                <label title =  "text"></label>
 
-                    <input value = "5" name = "rate" id = "star5" type = "radio">
-                    <label title =  "text" for = "star5"></label>
+                                <input value = "4" name = "rate2" id = "star14" type = "radio" $st4>
+                                <label title =  "text"></label>
 
-                    <input value = "4" name = "rate" id = "star4" type = "radio">
-                    <label title =  "text" for = "star4"></label>
+                                <input value = "3" name = "rate2" id = "star13" type = "radio" $st3>
+                                <label title =  "text"></label>
 
-                    <input value = "3" name = "rate" id = "star3" type = "radio">
-                    <label title =  "text" for = "star3"></label>
+                                <input value = "2" name = "rate2" id = "star12" type = "radio" $st2>
+                                <label title =  "text"></label>
 
-                    <input value = "2" name = "rate" id = "star2" type = "radio">
-                    <label title =  "text" for = "star2"></label>
-
-                    <input value = "1" name = "rate" id = "star1" type = "radio">
-                    <label title =  "text" for = "star1"></label>
-
+                                <input value = "1" name = "rate2" id = "star11" type = "radio" $st1>
+                                <label title =  "text"></label>
+                            notaJogo;
+                        ?>
                 </div>
             </div>
             <div class="sinopse" style="margin-top: 10vh; margin-left: 0vw; margin-right: 10vw; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -175,7 +242,7 @@
             </div>
         </div>
         
-        <div class="avalie" style = " display: flex; align-items: center; justify-content: center; margin-top: 20vh;">
+        <div class="avalie" style = " display: flex; align-items: center; justify-content: center; margin-top: 15vh;">
             <div style=" width: 30vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
                 <!--<p style="font-size: 30px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">Avalie</P>
                 <a type="submit" value="Avalie" id="avalie" name="btn-avalie" style="background-color: #B52C00; border: nome!important; font-size: 30px; display: flex; align-items: center; justify-content: center;">Avalie</a>
@@ -186,27 +253,156 @@
             </div>
         </div>
 
-        <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 20vh;">
-            <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
-                <div style="display: flex; flex-direction: row; ">
-                    <div>
-                        <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
+        <div>
+            <?php
+                require_once 'serverConnection.php';
+                $sql_com = "SELECT * FROM interacao;";
+                $res = mysqli_query($connect, $sql_com);
+                $comentario = mysqli_fetch_row($res);
+                //var_dump($comentario);
+                $intNota = intval($comentario[2]);
+                //var_dump($intNota);
+                // var_dump($comentario[4]);
+                $st1 = "";
+                $st2 = "";
+                $st3 = "";
+                $st4 = "";
+                $st5 = "";
+                switch($intNota){
+                    case 1: 
+                        $st1 = "checked"; 
+                        break;
+                    case 2: 
+                        $st2 = "checked"; 
+                        break;
+                    case 3: 
+                        $st3 = "checked"; 
+                        break;
+                    case 4: 
+                        $st4 = "checked"; 
+                        break;
+                    case 5: 
+                        $st5 = "checked"; 
+                        break;
+                }
+                echo<<<comentarios
+                <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 15vh;">
+                    <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
+                        <div style="display: flex; flex-direction: row; ">
+                            <div>
+                                <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
+                            </div>
+                            <div>
+                                <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">Guilherme França</p>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;">
+                        
+                                        <input value = "5" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st5>
+                                        <label title =  "text"></label>
+
+                                        <input value = "4" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st4>
+                                        <label title =  "text"></label>
+
+                                        <input value = "3" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st3>
+                                        <label title =  "text"></label>
+
+                                        <input value = "2" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st2>
+                                        <label title =  "text"></label>
+
+                                        <input value = "1" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st1>
+                                        <label title =  "text"></label>
+
+                                </div>
+                                    
+                                </div>
+                                
+                            </div>
+                                
+                            
+                            
+                        </div>
+                        <div style="position: absolute; display: flex; margin-top: 10vh; margin-left: 15vw; max-width: 40vw; max-height: 10vh;">
+                                <p style="font-size:20px; color: black; ">$comentario[3]</p>
+                        </div>
+                        
                     </div>
-                    <div>
-                        <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">Guilherme França</p>
-                    </div>
-                    <div>
-                        <img src="../figures/rate.png" style="width: 15vw; height: 10vh; margin-left: 5vw; margin-bot:0px;">
-                    </div>
-                    
                 </div>
-                <div style="position: absolute; display: flex; margin-top: 10vh; margin-left: 15vw; max-width: 40vw; max-height: 10vh;">
-                    <p style="font-size:20px; color: black; ">Jogo de bosta 🤮 </p>
-                </div>
+                comentarios;
+                $comentario = mysqli_fetch_row($res);
+
+                while($comentario != NULL){
+                    $intNota = intval($comentario[2]);
+                    //var_dump($intNota);
+                    $st1 = "";
+                    $st2 = "";
+                    $st3 = "";
+                    $st4 = "";
+                    $st5 = "";
+                    switch($intNota){
+                        case 1: 
+                            $st1 = "checked"; 
+                            break;
+                        case 2: 
+                            $st2 = "checked"; 
+                            break;
+                        case 3: 
+                            $st3 = "checked"; 
+                            break;
+                        case 4: 
+                            $st4 = "checked"; 
+                            break;
+                        case 5: 
+                            $st5 = "checked"; 
+                            break;
+                    }
+                    //var_dump($comentario[4]);
+                    echo<<<comentarios
+                    <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 5vh;">
+                        <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
+                            <div style="display: flex; flex-direction: row; ">
+                                <div>
+                                    <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
+                                </div>
+                                <div>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bottom: 0px;">Guilherme França</p>
+                                </div>
+                                <div>
+                                    <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;" >
+                                        
+                                        <input value = "5" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st5>
+                                        <label title =  "text" for = "star1.$comentario[4]"></label>
+
+                                        <input value = "4" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st4>
+                                        <label title =  "text" for = "star1.$comentario[4]"></label>
+
+                                        <input value = "3" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st3>
+                                        <label title =  "text" for = "star1.$comentario[4]"></label>
+
+                                        <input value = "2" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st2>
+                                        <label title =  "text" for = "star1.$comentario[4]"></label>
+
+                                        <input value = "1" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st1>
+                                        <label title =  "text" for = "star1.$comentario[4]"></label>
+
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            <div style="position: absolute; display: flex; margin-top: 10vh; margin-left: 15vw; max-width: 40vw; max-height: 10vh;">
+                                <p style="font-size:20px; color: black; ">$comentario[3]</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    comentarios;
+                    $comentario = mysqli_fetch_row($res);
+                }
                 
-            </div>
-            
-        </div>  
+            ?>
+        </div>
     </div>
 
     

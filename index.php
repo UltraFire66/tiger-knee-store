@@ -19,7 +19,7 @@
                         if(mysqli_num_rows($resultado) == 1):
                             $dados = mysqli_fetch_array ($resultado);
                             $_SESSION ['logado'] = true ;
-                            $_SESSION ['id_usuario'] = $dados ['id'];
+                            $_SESSION ['id_usuario'] = $dados ['idusuario'];
                             header('Location:pags/home.php');
                         else :
                             $erros[] = "<li>Usuário e senha não conferem.</li>";

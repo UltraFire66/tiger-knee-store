@@ -8,6 +8,7 @@
     endif;
 
     $id = $_SESSION['id_usuario'];
+    //var_dump($id);
     $sql = "SELECT * FROM usuario WHERE idUsuario = '$id'";
     $resultado = mysqli_query($connect, $sql);
     $dados = mysqli_fetch_array($resultado);
