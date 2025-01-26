@@ -164,8 +164,13 @@
                             $resCount = mysqli_fetch_array(mysqli_query($connect, "SELECT COUNT(nota) from interacao;"));
                             //var_dump($resSoma);
                             //var_dump($resCount);
-                            $media = $resSoma[0]/$resCount[0];
-                            $notaMedia = intval($media);
+                            if($resCount[0] == 0){
+                                $notaMedia = 0;
+                            }else{
+                                $media = $resSoma[0]/$resCount[0];
+                                $notaMedia = intval($media);
+                            }
+                            
                             //var_dump($notaMedia);
                             $st1 = "";
                             $st2 = "";
@@ -242,8 +247,8 @@
             </div>
         </div>
         
-        <div class="avalie" style = " display: flex; align-items: center; justify-content: center; margin-top: 15vh;">
-            <div style=" width: 30vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
+        <div class="avalie" style = " display: flex; align-items: center; justify-content: center; margin-top: 15vh; ">
+            <div style=" width: 30vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px; ">
                 <!--<p style="font-size: 30px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">Avalie</P>
                 <a type="submit" value="Avalie" id="avalie" name="btn-avalie" style="background-color: #B52C00; border: nome!important; font-size: 30px; display: flex; align-items: center; justify-content: center;">Avalie</a>
                 <button type="button"  value="Avalie" id="avalie" name="btn-avalie" style="background-color: #B52C00; border: nome!important; font-size: 30px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">Avalie</button>-->
@@ -259,78 +264,81 @@
                 $sql_com = "SELECT * FROM interacao;";
                 $res = mysqli_query($connect, $sql_com);
                 $comentario = mysqli_fetch_row($res);
-                //var_dump($comentario);
-                $intNota = intval($comentario[2]);
-                //var_dump($intNota);
-                // var_dump($comentario[4]);
-                $st1 = "";
-                $st2 = "";
-                $st3 = "";
-                $st4 = "";
-                $st5 = "";
-                switch($intNota){
-                    case 1: 
-                        $st1 = "checked"; 
-                        break;
-                    case 2: 
-                        $st2 = "checked"; 
-                        break;
-                    case 3: 
-                        $st3 = "checked"; 
-                        break;
-                    case 4: 
-                        $st4 = "checked"; 
-                        break;
-                    case 5: 
-                        $st5 = "checked"; 
-                        break;
-                }
-                echo<<<comentarios
-                <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 15vh;">
-                    <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
-                        <div style="display: flex; flex-direction: row; ">
-                            <div>
-                                <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
-                            </div>
-                            <div>
-                                <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">Guilherme França</p>
-                            </div>
-                            <div>
+                if($comentario != NULL){
+                    
+                    //var_dump($comentario);
+                    $intNota = intval($comentario[2]);
+                    //var_dump($intNota);
+                    // var_dump($comentario[4]);
+                    $st1 = "";
+                    $st2 = "";
+                    $st3 = "";
+                    $st4 = "";
+                    $st5 = "";
+                    switch($intNota){
+                        case 1: 
+                            $st1 = "checked"; 
+                            break;
+                        case 2: 
+                            $st2 = "checked"; 
+                            break;
+                        case 3: 
+                            $st3 = "checked"; 
+                            break;
+                        case 4: 
+                            $st4 = "checked"; 
+                            break;
+                        case 5: 
+                            $st5 = "checked"; 
+                            break;
+                    }
+                    echo<<<comentarios
+                    <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 15vh;">
+                        <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
+                            <div style="display: flex; flex-direction: row; ">
                                 <div>
-                                    <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;">
-                        
-                                        <input value = "5" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st5>
-                                        <label title =  "text"></label>
-
-                                        <input value = "4" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st4>
-                                        <label title =  "text"></label>
-
-                                        <input value = "3" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st3>
-                                        <label title =  "text"></label>
-
-                                        <input value = "2" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st2>
-                                        <label title =  "text"></label>
-
-                                        <input value = "1" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st1>
-                                        <label title =  "text"></label>
-
+                                    <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
                                 </div>
+                                <div>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">Guilherme França</p>
+                                </div>
+                                <div>
+                                    <div>
+                                        <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;">
+                            
+                                            <input value = "5" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st5>
+                                            <label title =  "text"></label>
+
+                                            <input value = "4" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st4>
+                                            <label title =  "text"></label>
+
+                                            <input value = "3" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st3>
+                                            <label title =  "text"></label>
+
+                                            <input value = "2" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st2>
+                                            <label title =  "text"></label>
+
+                                            <input value = "1" name = "rate.$comentario[4]" id = "star1.$comentario[4]" type = "radio" $st1>
+                                            <label title =  "text"></label>
+
+                                    </div>
+                                        
+                                    </div>
                                     
                                 </div>
+                                    
+                                
                                 
                             </div>
-                                
-                            
+                            <div style="position: absolute; display: flex; margin-top: 10vh; margin-left: 15vw; max-width: 40vw; max-height: 10vh;">
+                                    <p style="font-size:20px; color: black; ">$comentario[3]</p>
+                            </div>
                             
                         </div>
-                        <div style="position: absolute; display: flex; margin-top: 10vh; margin-left: 15vw; max-width: 40vw; max-height: 10vh;">
-                                <p style="font-size:20px; color: black; ">$comentario[3]</p>
-                        </div>
-                        
                     </div>
-                </div>
-                comentarios;
-                $comentario = mysqli_fetch_row($res);
+                    comentarios;
+                    $comentario = mysqli_fetch_row($res);
+                }
 
                 while($comentario != NULL){
                     $intNota = intval($comentario[2]);
