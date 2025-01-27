@@ -1,9 +1,22 @@
 <?php
     require_once 'serverConnection.php';
     session_start ();
+    $string = $_SERVER["REQUEST_URI"];
+    //var_dump($string);
+    $idJogo = explode("?", $string);
+    //var_dump($idJogo);
+    $idJogo = explode("=", $idJogo[1]);
+    //var_dump($idJogo);
+    $api = 'https://store.steampowered.com/api/appdetails?appids='.$idJogo[1];
+    //var_dump($api);
+    $jogo = json_decode(file_get_contents($api),true);
+    
+?>
+<?php
     /*if(!isset($_SESSION['logado'])):
         header('Location: ../index.php');
     endif;*/
+    
     $id = $_SESSION['id_usuario'];
     $banana="banana";
     if(isset($_POST['btn-aval']) && isset($_SESSION['logado'])){
@@ -14,17 +27,19 @@
         }else{
             $nota=0;
         }
-        $sql_insert = "INSERT INTO interacao (idjogo, nota, comentario, idUsuario) values (2, $nota, '$avaliacao', $id);";
-        $sql_update = "UPDATE interacao SET nota=$nota, comentario='$avaliacao', idUsuario=$id WHERE (idUsuario = $id and idjogo=2);";
-        $sql_select = "SELECT * FROM interacao WHERE (idUsuario = $id and idjogo=2);";
+
+        $sql_insert = "INSERT INTO interacao (idjogo, nota, comentario, idUsuario) values ($idJogo[1], $nota, '$avaliacao', $id);";
+        $sql_update = "UPDATE interacao SET nota=$nota, comentario='$avaliacao', idUsuario=$id WHERE (idUsuario = $id and idjogo=$idJogo[1]);";
+        $sql_select = "SELECT * FROM interacao WHERE (idUsuario = $id and idjogo=$idJogo[1]);";
         $r=mysqli_query($connect, $sql_select);
+        
         $dados = mysqli_fetch_array($r);
-        //var_dump($dados);
         if($dados == NULL){ 
             mysqli_query($connect, $sql_insert);
         }else{
             mysqli_query($connect, $sql_update);
-        }                                                                               
+        }
+                                                                                
     }
 ?>
 
@@ -40,23 +55,24 @@
 
 ?>
 <?php
-    if(isset($_GET['id'])){
-        if($_GET['id']==1){
+    $string = $_SERVER["REQUEST_URI"];
+    $idA = explode("?", $string);
+    //ar_dump($idA);
+    
+    //var_dump($id);
+    if(isset($idA[2])){
+        $id = explode("=", $idA[2]);
+        if($id[1]==1){
             $display = "flex";
             $blur = "blur(5px)";
         }
-        if($_GET['id']==0){
+        if($id[1]==0){
             $display = "none";
             $blur = "blur(0px)";
         }   
     }
 ?>
-<?php
-    
-    $jogo = json_decode(file_get_contents('https://store.steampowered.com/api/appdetails?appids=323470'),true);
-    
 
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +98,7 @@
             z-index: 3;
             background-color: #444444;
             ">
-           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" style="display: flex; justify-content: center; flex-direction: column; align-items:center;">
+           <form action="<?php echo "jogo.php?idJogo=$idJogo[1]?id=0"; ?>" method="POST" style="display: flex; justify-content: center; flex-direction: column; align-items:center;">
                 <div style="display: flex; width: 28vw;  align-items: center; margin-top: 15px">
                     <p style="margin-left: 0px; font-size:50px;">Avaliação</p>
                     <div class = "rating" style="margin-left: 5vw; margin-bottom: 1vh;" >
@@ -109,9 +125,15 @@
                         <textarea type="text" id="aval" name="aval" style="display: flex; background-color:#A9A17A; width: 23vw; height: 25vh; resize: none; outline: 0; border: 0;"></textarea>
                     </div>
                 </div>
-                <div style="margin-top: 30px; width: 20vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
-                    <input type="submit" name="btn-aval" style="border: 0; background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;" value="Avaliar">
-                </div>
+                <?php
+                    echo <<< avaliar
+                        <a href = "jogo.php?idJogo=$idJogo[1]?id=0" style="color: black; text-decoration: none;">
+                            <div style="margin-top: 30px; width: 20vw; height: 10vh; background-color: #B52C00; display: flex; align-items: center; justify-content: center; border-radius: 150px;">
+                                <input type="submit" name="btn-aval" style="border: 0; background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;" value="Avaliar">
+                            </div>
+                        </a>
+                    avaliar;
+                ?>
             </form>
     </div>
     
@@ -152,16 +174,16 @@
         </div>
         
         <div id="cabecalho" style="display: flex; height: 35%; width:100%; ">
-            <img src=<?php echo $jogo['323470']['data']['screenshots'][1]['path_full']?> style = "width:90%" alt="Cabeçalho">
+            <img src=<?php echo $jogo[$idJogo[1]]['data']['screenshots'][1]['path_full']?> style = "width:90%" alt="Cabeçalho">
         </div>
 
         <div class="img1-sinopse">
             <div class ="img1" style="min-width: 30%; min-height: 30%; margin-left: 10vw; ">
-                <img src="<?php echo $jogo['323470']['data']['header_image']?>" alt="Imagem à esquerda" width="70%" height="70%">
+                <img src="<?php echo $jogo[$idJogo[1]]['data']['header_image']?>" alt="Imagem à esquerda" width="70%" height="70%">
                 <div class = "ratingComentario">
                         <?php
-                            $resSoma = mysqli_fetch_array(mysqli_query($connect, "SELECT SUM(nota) from interacao;"));
-                            $resCount = mysqli_fetch_array(mysqli_query($connect, "SELECT COUNT(nota) from interacao;"));
+                            $resSoma = mysqli_fetch_array(mysqli_query($connect, "SELECT SUM(nota) from interacao WHERE idJogo = $idJogo[1];"));
+                            $resCount = mysqli_fetch_array(mysqli_query($connect, "SELECT COUNT(nota) from interacao WHERE idJogo = $idJogo[1];"));
                             //var_dump($resSoma);
                             //var_dump($resCount);
                             if($resCount[0] == 0){
@@ -215,7 +237,7 @@
                 </div>
             </div>
             <div class="sinopse" style="margin-top: 10vh; margin-left: 0vw; margin-right: 10vw; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <p style="font-size:20px"> <?php echo $jogo['323470']['data']['detailed_description']?> </p>
+                <p style="font-size:20px"> <?php echo $jogo[$idJogo[1]]['data']['detailed_description']?> </p>
             </div>
         </div>
         
@@ -228,13 +250,13 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][0]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="<?php echo $jogo[$idJogo[1]]['data']['screenshots'][0]['path_full']?>" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][2]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="<?php echo $jogo[$idJogo[1]]['data']['screenshots'][2]['path_full']?>" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $jogo['323470']['data']['screenshots'][3]['path_full']?>" class="d-block w-100" alt="...">
+                    <img src="<?php echo $jogo[$idJogo[1]]['data']['screenshots'][3]['path_full']?>" class="d-block w-100" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -253,8 +275,10 @@
                 <!--<p style="font-size: 30px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">Avalie</P>
                 <a type="submit" value="Avalie" id="avalie" name="btn-avalie" style="background-color: #B52C00; border: nome!important; font-size: 30px; display: flex; align-items: center; justify-content: center;">Avalie</a>
                 <button type="button"  value="Avalie" id="avalie" name="btn-avalie" style="background-color: #B52C00; border: nome!important; font-size: 30px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">Avalie</button>-->
-                <a href= "jogo.php?id=1" style="background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;">Avaliar</a>
-                
+                <?php echo <<<avalie
+                    <a href= "jogo.php?idJogo=$idJogo[1]?id=1" style="background-color: #B52C00; font-size: 30px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;">Avaliar</a>
+                    avalie;
+                ?>
                 
             </div>
         </div>
@@ -262,7 +286,7 @@
         <div>
             <?php
                 require_once 'serverConnection.php';
-                $sql_com = "SELECT * FROM interacao;";
+                $sql_com = "SELECT * FROM interacao where idJogo = $idJogo[1];";
                 $res = mysqli_query($connect, $sql_com);
                 $comentario = mysqli_fetch_row($res);
                 if($comentario != NULL){
@@ -271,6 +295,9 @@
                     $intNota = intval($comentario[2]);
                     //var_dump($intNota);
                     // var_dump($comentario[4]);
+                    $sql_nome = "SELECT nome FROM usuario WHERE idusuario = $comentario[4];";
+                    $nome_res = mysqli_query($connect, $sql_nome);
+                    $nome = mysqli_fetch_array($nome_res);
                     $st1 = "";
                     $st2 = "";
                     $st3 = "";
@@ -302,7 +329,7 @@
                                     <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">Guilherme França</p>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">$nome[0]</p>
                                 </div>
                                 <div>
                                     <div>
@@ -344,6 +371,9 @@
 
                 while($comentario != NULL){
                     $intNota = intval($comentario[2]);
+                    $sql_nome = "SELECT nome FROM usuario WHERE idusuario = $comentario[4];";
+                    $nome_res = mysqli_query($connect, $sql_nome);
+                    $nome = mysqli_fetch_array($nome_res);
                     //var_dump($intNota);
                     $st1 = "";
                     $st2 = "";
@@ -377,7 +407,7 @@
                                     <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bottom: 0px;">Guilherme França</p>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bottom: 0px;">$nome[0]</p>
                                 </div>
                                 <div>
                                     <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;" >

@@ -91,13 +91,13 @@
                     foreach($jogos as  $jogo){
                         
                         
-
-                        $posicao = $ids[$pos];
-                        $imagem_capa = $jogo[$posicao]["data"]["header_image"];
-                        $nome = $jogo[$posicao]["data"]["name"];
-                        $genero = $jogo[$posicao]["data"]["genres"][0]["description"];
+                        
+                        $codJogo = $ids[$pos];
+                        $imagem_capa = $jogo[$codJogo]["data"]["header_image"];
+                        $nome = $jogo[$codJogo]["data"]["name"];
+                        $genero = $jogo[$codJogo]["data"]["genres"][0]["description"];
                         //parafernalha pra colocar a virgula no preco
-                        $preco_nao_formatado = $jogo[$posicao]["data"]["price_overview"]["initial"];;
+                        $preco_nao_formatado = $jogo[$codJogo]["data"]["price_overview"]["initial"];;
                         $p = str_split($preco_nao_formatado);
                         $p[sizeof($p)] = $p[sizeof($p) - 1];
                         $p[sizeof($p) - 2] = $p[sizeof($p) - 3];
@@ -108,34 +108,36 @@
                         if(isset($_POST['pesquisar'])){
                             if(strpos(strtolower($nome),strtolower($_POST['pesquisar'])) !== false){
                                 echo <<<card
-                                <div class="card" style = "
-                                display: flex;
-                                justify-content: center;
-        
-                                margin-top: 4vh;
-                                margin-left: 3vw;
-        
-                                flex-direction: column;
-                                height: 28.5vh;
-                                width: 12vw;
-                                box-shadow: 10px 10px 5px gray;
-        
-                                ">
-                                    <img class = "imagem-capa" style = "width: auto; height: auto" src = $imagem_capa>
-                                    
-                                        <div style = "margin-left: 15px">
-                                            <p style = "font-size: 15px; align-self: center; margin-top: 3px"> $nome</p>
-                                            <p style = "font-size: 10px;  align-self: center; margin-top: -14px">  $genero</p>
+                                <a href="jogo.php?idJogo=$codJogo" style="text-decoration: none; color: black;">
+                                    <div class="card" style = "
+                                    display: flex;
+                                    justify-content: center;
+            
+                                    margin-top: 4vh;
+                                    margin-left: 3vw;
+            
+                                    flex-direction: column;
+                                    height: 28.5vh;
+                                    width: 12vw;
+                                    box-shadow: 10px 10px 5px gray;
+            
+                                    ">
+                                        <img class = "imagem-capa" style = "width: auto; height: auto" src = $imagem_capa>
+                                        
+                                            <div style = "margin-left: 15px">
+                                                <p style = "font-size: 15px; align-self: center; margin-top: 3px"> $nome</p>
+                                                <p style = "font-size: 10px;  align-self: center; margin-top: -14px">  $genero</p>
+                                            </div>
+                                            
+                                            <img style = "width: 8vw; height: 5vh; align-self: center; margin-top: -7px; margin-bottom: 7px" class = "imagem" src = "../figures/rate.png">
+                                
+                                        
+                                        <div style = "background-color: green; width: 100%; height: auto; display: flex; justify-content: center">
+                                            <p style = "font-size: 25px; margin-top: 3px; margin-bottom: 3px; "> R$ $preco</p>
                                         </div>
                                         
-                                        <img style = "width: 8vw; height: 5vh; align-self: center; margin-top: -7px; margin-bottom: 7px" class = "imagem" src = "../figures/rate.png">
-                            
-                                    
-                                    <div style = "background-color: green; width: 100%; height: auto; display: flex; justify-content: center">
-                                    <p style = "font-size: 25px; margin-top: 3px; margin-bottom: 3px; "> R$ $preco</p>
                                     </div>
-                                    
-                                </div>
+                                </a>
                             card;
                                 
                             }
@@ -146,36 +148,40 @@
                             
                             
 
-                        echo <<<card
-                        <div class="card" style = "
-                        display: flex;
-                        justify-content: center;
-
-                        margin-top: 4vh;
-                        margin-left: 3vw;
-
-                        flex-direction: column;
-                        height: 28.5vh;
-                        width: 12vw;
-                        box-shadow: 10px 10px 5px gray;
-
-                        ">
-                            <img class = "imagem-capa" style = "width: auto; height: auto" src = $imagem_capa>
+                            echo <<<card
                             
-                                <div style = "margin-left: 15px">
-                                    <p style = "font-size: 15px; align-self: center; margin-top: 3px"> $nome</p>
-                                    <p style = "font-size: 10px;  align-self: center; margin-top: -14px">  $genero</p>
-                                </div>
+                                <a href="jogo.php?idJogo=$codJogo" style="text-decoration: none; color: black;">
+                                    <div class="card" style = "
+                                    display: flex;
+                                    justify-content: center;
+
+                                    margin-top: 4vh;
+                                    margin-left: 3vw;
+
+                                    flex-direction: column;
+                                    height: 28.5vh;
+                                    width: 12vw;
+                                    box-shadow: 10px 10px 5px gray;
+
+                                    ">
+
+                                        <img class = "imagem-capa" style = "width: auto; height: auto" src = $imagem_capa>
+                                        
+                                            <div style = "margin-left: 15px">
+                                                <p style = "font-size: 15px; align-self: center; margin-top: 3px"> $nome</p>
+                                                <p style = "font-size: 10px;  align-self: center; margin-top: -14px">  $genero</p>
+                                            </div>
+                                            
+                                            <img style = "width: 8vw; height: 5vh; align-self: center; margin-top: -7px; margin-bottom: 7px" class = "imagem" src = "../figures/rate.png">
                                 
-                                <img style = "width: 8vw; height: 5vh; align-self: center; margin-top: -7px; margin-bottom: 7px" class = "imagem" src = "../figures/rate.png">
-                    
-                            
-                            <div style = "background-color: green; width: 100%; height: auto; display: flex; justify-content: center">
-                            <p style = "font-size: 25px; margin-top: 3px; margin-bottom: 3px; "> R$ $preco</p>
-                            </div>
-                            
-                        </div>
-                        card;
+                                        
+                                        <div style = "background-color: green; width: 100%; height: auto; display: flex; justify-content: center">
+                                        <p style = "font-size: 25px; margin-top: 3px; margin-bottom: 3px; "> R$ $preco</p>
+                                        </div>
+                                        
+                                    </div>
+                                </a>
+                            card;
                         }
                     }
                        
