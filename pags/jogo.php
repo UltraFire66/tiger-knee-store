@@ -1,6 +1,13 @@
 <?php
     require_once 'serverConnection.php';
     session_start ();
+
+    $id = $_SESSION['id_usuario'];
+    //var_dump($id);
+    $sql1 = "SELECT * FROM usuario WHERE idUsuario = '$id'";
+    $resultado10 = mysqli_query($connect, $sql1);
+    $dados_usuario = mysqli_fetch_array($resultado10);
+
     $string = $_SERVER["REQUEST_URI"];
     //var_dump($string);
     $idJogo = explode("?", $string);
@@ -20,6 +27,8 @@
     $id = $_SESSION['id_usuario'];
     $banana="banana";
     if(isset($_POST['btn-aval']) && isset($_SESSION['logado'])){
+        
+
         $id = $_SESSION['id_usuario'];
         $avaliacao = mysqli_escape_string ($connect, $_POST['aval']);
         if(isset($_POST['rate'])){
@@ -41,7 +50,31 @@
         }
                                                                                 
     }
+
+    if(isset($_POST['btn-compra']) && isset($_SESSION['logado'])){
+        $id = $_SESSION['id_usuario'];
+
+        $sql_insert = "INSERT INTO pedido(quantidade,idjogo,idUsuario,comprado) values (1, $idJogo[1], $id,0);"; 
+        $sql_update = "UPDATE pedido SET quantidade = quantidade + 1 WHERE (idUsuario = $id and comprado = 0 and idjogo = $idJogo[1]);";
+        $sql_select = "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);";
+        $r=mysqli_query($connect, $sql_select);
+        $dados = mysqli_fetch_array($r);
+
+
+        if($dados == NULL){
+            mysqli_query($connect, $sql_insert);
+        }else{
+            mysqli_query($connect, $sql_update);
+        }
+
+        header('Location:home.php');
+
+    }
+
+
 ?>
+
+
 
 
 
@@ -50,7 +83,13 @@
     
     if(!isset($display)){
         $display = "none";
-        $blur = "blur(0px)"; 
+        $blur = "blur(0px)";        
+    }
+
+    if(!isset($displayCompra)){
+        $displayCompra = "none";
+        $blur = "blur(0px)";
+         
     }
 
 ?>
@@ -66,11 +105,17 @@
             $display = "flex";
             $blur = "blur(5px)";
         }
+        else if($id[1]==2){
+            $displayCompra = "flex";
+            $blur = "blur(5px)";
+        }
         if($id[1]==0){
             $display = "none";
             $blur = "blur(0px)";
         }   
     }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -119,6 +164,7 @@
                         <label title =  "text" for = "star1"></label>
 
                     </div>
+
                 </div>
                 <div style="display: flex; background-color: #fcf7d1; width: 28vw; height: 30vh; margin-top: 30px; border-radius: 30px; justify-content: center; align-items: center;">
                     <div style="display: flex;  border-radius: 30px; width: 25vw; height: 27vh; background-color:#A9A17A; justify-content: center; align-items: center;">
@@ -134,6 +180,37 @@
                         </a>
                     avaliar;
                 ?>
+            </form>
+    </div>
+
+    <div style = "display: <?php echo $displayCompra?>; position: absolute;
+            background-color: white;
+            border-radius: 30px;
+            align-items: center;
+            flex-direction: column;
+            margin-left: 35vw;
+            margin-top: 20vh;
+            filter: blur(0px);
+            width: 30vw;
+            height: 30vh;
+            z-index: 3;
+            background-color: #fff;
+            ">
+
+            <p style = "font-weight: bold; margin-top: 3vh; font-size: 20px">Tem certeza que deseja adicionar esse jogo ao carrinho?</p>
+            
+            <img src="<?php echo $jogo[$idJogo[1]]['data']['header_image']?>" style = "border-radius: 10px; width: 13vw; height: 10vh"></img>
+
+            <form action="<?php echo "jogo.php?idJogo=$idJogo[1]?id=0"; ?>" method="POST" style="display: flex; justify-content: center; flex-direction: row; align-items:center; gap: 5vw; margin-top: 4vh">
+            
+                <a href = <?php echo "jogo.php?idJogo=$idJogo[1]?id=0"?> style = "width: 7vw; height: 5vh; border-radius: 10px; background-color: #B52C00; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;">Não</a>
+
+                <a href = <?php echo "jogo.php?idJogo=$idJogo[1]?id=0" ?> style="color: black; text-decoration: none;">
+                
+                    <input type="submit" name="btn-compra" style="border: 0; background-color: #8cfc03; width: 7vw; height: 5vh; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: black; text-decoration: none;" value="Sim">
+                
+                </a>
+
             </form>
     </div>
     
@@ -153,22 +230,20 @@
         flex-direction: row;
         justify-content: space-between" >
 
-            <div style = "display:flex; flex-direction: row">
+            <a href = "home.php" style = "display:flex; flex-direction: row; text-decoration: none">
                 <div style = "font-size: 30px; color: #9EA407; margin-left: 15px; display:flex; align-items: center; justify-content: center; flex-direction: column; width: 10vw; height: 100%;">
                         <p style = "margin: 0; padding: 5px;">TYGER</p>
                         <p style = "margin: 0 0 0 40px; padding: 5px;">KNEE</p>
                         <p style = "margin: 0; padding: 5px;">STORE</p>
                 </div>
                     <img style="width: 5vw; height: 10vh; margin-left: 20px; align-self: center" src="../figures/logo.gif" alt=""/>
-            </div>
+            </a>
             
 
-            <p style = "align-self: end; margin: 10px; font-size: 30px">Gêneros</p>
-            <p style = "align-self: end; margin: 10px; font-size: 30px">Lançamento</p>
-            <p style = "align-self: end; margin: 10px; font-size: 30px">Bem avaliados</p>
+            
             <div style = "display: flex;flex-direction: column; margin-right: 25px">
                 <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center" src="../figures/perfil.png" alt=""/>
-                <p style = " font-size: 20px; align-self: center">Caio</p>
+                <a href = "perfil.php" style = "text-decoration: none; color: black"><p style = " font-size: 20px; align-self: center"><?php echo $dados_usuario['nome']?></p></a>
             </div>
 
         </div>
@@ -235,6 +310,11 @@
                             notaJogo;
                         ?>
                 </div>
+
+                <div>
+                    <a href = <?php echo "jogo.php?idJogo=$idJogo[1]?id=2" ?> style = "background-color: green;  min-width: 10vw; min-height: 5vh; border-radius: 10px; display:flex; align-items: center; justify-content: center; text-decoration: none; color: black;"> Comprar</a>
+                </div>
+
             </div>
             <div class="sinopse" style="margin-top: 10vh; margin-left: 0vw; margin-right: 10vw; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <p style="font-size:20px"> <?php echo $jogo[$idJogo[1]]['data']['detailed_description']?> </p>

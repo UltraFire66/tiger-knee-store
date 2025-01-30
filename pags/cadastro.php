@@ -23,16 +23,25 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     $nome = $_POST["nome"];
     $login = $_POST["login"];
     $senha = MD5($_POST["senha"]);
- if(empty($login) or empty($senha) or empty($nome)):
-    $erros[] = "<li>Os campos nome/login/senha precisam ser preenchidos.</li>";
+    $cpf = $_POST["cpf"];
+    $cep = $_POST["cep"];
+    $estado = $_POST["estado"];
+    $cidade = $_POST["cidade"];
+    $rua = $_POST["rua"];
+    $numero = $_POST["numero"];
+    $confirmasenha = MD5($_POST["confirmasenha"]);
+ if(empty($login) or empty($senha) or empty($nome) or empty($cpf) or empty($cep) or empty($estado) or empty($cidade) or empty($rua) or empty($numero)):
+    $erros[] = "<li>Os campos precisam ser preenchidos.</li>";
     else:
         $sql = "SELECT email FROM usuario WHERE email = '$loginDB'";
         $resultado = mysqli_query($connect, $sql);
         if(mysqli_num_rows($resultado) > 0):
             $erros[] = "<li>Esse login já existe.</li>";
+        elseif($senha != $confirmasenha):
+            $erros[] = "<li>As senhas digitadas não conferem.</li>";
         else:
-            $sqlInsert = "INSERT INTO usuario(nome,email,senha) VALUES ('$nome',
-            '$login','$senha')";
+            $sqlInsert = "INSERT INTO usuario(nome,email,senha,cpf,cep,estado,cidade,rua,numero) VALUES ('$nome',
+            '$login','$senha','$cpf','$cep','$estado','$cidade','$rua','$numero')";
             $insert = mysqli_query($connect, $sqlInsert); 
     if($insert){
         $display = "flex";
@@ -45,7 +54,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
         endif;
         endif;
         endif;
-    ?>
+?>
 
 
 
@@ -56,7 +65,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     <meta charset="UTF-8">
     <link rel="stylesheet"  href="../estilos/cadastro.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página de Cadastro</title>
 </head>
 <body style = "
     
@@ -83,34 +92,52 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     ">
 
 
-    <div class="formulario">
-
+    <div class="formulario" style="width: 27%; height: 65%;">
+        <div class="titulo-form" style="display: flex; justify-content: center;">
+                <h1 style="margin-top: 1vh;">Cadastro</h1>
+        </div>
         <div style="display: flex; flex-direction: row; align-items: center; ">
-     
+    
+        
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
- 
-            <div class="titulo-form">
-                <h1 style="display: flex; justify-content: center">Cadastro</h1>
-            </div>
-
-                <div class="inputs">
-                    Nome: <input type="text" name="nome" id = "nome"><br>
-                    Email: <input type="text" name="login" id = "login"><br>
-                    Senha: <input type="password" name="senha" id = "senha"><br>
-                    <input type="submit" value="Cadastrar" id="cadastrar" name="btn-cadastrar" >
+                <div style="display: flex; flex-direction: row; justify-content: center;">
+                    <div class="inputs" style="">
+                        Nome: <input type="text" name="nome" id = "nome" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        Email: <input type="text" name="login" id = "login" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        CPF: <input type="text" name="cpf" id = "cpf" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        CEP: <input type="text" name="cep" id = "cep" style="display: flex; flex-direction: column; margin-top: 1px;">
+                    </div>
+                    <img style="width: 10vw; height: 20vh; margin-left: 20%" src="../figures/sf2zangief.gif" />
+                </div>
+                <div class="inputs" style="">
+                    <div style="display: flex; flex-direction: row; justify-content: center; gap:18%;">
+                        <div class="inputs" style="align-items:center;">
+                            Estado: <input type="text" name="estado" id = "estado" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Cidade: <input type="text" name="cidade" id = "cidade" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Senha: <input type="password" name="senha" id = "senha" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        </div>
+                        <div class="inputs" style="align-items:center;">
+                            Número: <input type="text" name="numero" id = "numero" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Rua: <input type="text" name="rua" id = "rua" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Confirmar Senha: <input type="password" name="confirmasenha" id = "confirmasenha" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center;"><input type="submit" value="Cadastrar" id="cadastrar" name="btn-cadastrar" ></div>
+                    
+                        
                 </div>
             </form>
 
-            <img style="width: 10vw; height: 20vh; margin-left: 20px" src="../figures/sf2zangief.gif" />
+            
+            
         </div>
-
-        <?php 
-        if(!empty($erros)):
-            foreach($erros as $erro):
-                echo $erro;
-            endforeach;
-        endif;    
-    ?>
+            <?php 
+                if(!empty($erros)):
+                    foreach($erros as $erro):
+                    echo $erro;
+                    endforeach;
+                endif;    
+            ?>
     </div>
     
 
@@ -125,14 +152,3 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
