@@ -6,6 +6,10 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
         $display = "none";
         $blur = "blur(0px)";
     }
+    if(!isset($displayFoto)){
+        $display = "none";
+        $blur = "blur(0px)";
+    }
     if(!isset($$wallpaper)){
         $wallpaper = $wallpapers[array_rand($wallpapers)];
     }
@@ -44,7 +48,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
             '$login','$senha','$cpf','$cep','$estado','$cidade','$rua','$numero')";
             $insert = mysqli_query($connect, $sqlInsert); 
     if($insert){
-        $display = "flex";
+        $displayFoto = "flex";
         $blur = "blur(5px)";
     }
         else{
@@ -54,6 +58,14 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
         endif;
         endif;
         endif;
+?>
+
+
+<?php 
+
+
+
+
 ?>
 
 
@@ -144,6 +156,31 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     
 
     </div>
+
+    <div class="janelaConcluido" style = "display: flex; margin-left: 17.5vw; width: 65vw; height: 70vh;">
+
+        <p style = "font-size: 50px;">Escolha sua foto de perfil:</p>
+        
+        <div style = " display: grid; grid-template-columns: auto auto auto auto">
+
+            <?php for($i = 0 ; $i < 12 ; $i++)
+                echo <<< card
+
+                <img src = "../figures/profile/img$i.png" style = "width: 10vw; height: 20vh; margin-left: 20px;"/>
+
+                card;
+            
+            
+            ?>
+
+        </div>
+
+        
+
+       
+        <button onclick="location.href = '../index.php';">voltar</button>
+    </div>
+
     <div class="janelaConcluido" style = "display: <?php echo $display?>">
 
         <p style = "font-size: 50px;">cadastro concluído!</p>
