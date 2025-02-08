@@ -152,7 +152,7 @@
                         <label title =  "text" for = "star5"></label>
 
                         <input value = "4" name = "rate" id = "star4" type = "radio">
-                        <label title =  "text" for = "star4"></label>
+                        <label title =  "text" for = "star4"></label>   
 
                         <input value = "3" name = "rate" id = "star3" type = "radio">
                         <label title =  "text" for = "star3"></label>
@@ -401,15 +401,17 @@
                             break;
                         default;
                     }
+                    $fotoUsuario = mysqli_fetch_array(mysqli_query($connect, "SELECT foto from usuario where idusuario = $comentario[4];"));
+                    //var_dump($fotoUsuario);
                     echo<<<comentarios
                     <div class="coment" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 20vh; margin-top: 15vh;">
                         <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
                             <div style="display: flex; flex-direction: row; ">
                                 <div>
-                                    <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
+                                    <img src="$fotoUsuario[0]" style="width: 12vw; height: 20vh; border-radius: 100px;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px;">$nome[0]</p>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p>
                                 </div>
                                 <div>
                                     <div>
@@ -454,6 +456,7 @@
                     $sql_nome = "SELECT nome FROM usuario WHERE idusuario = $comentario[4];";
                     $nome_res = mysqli_query($connect, $sql_nome);
                     $nome = mysqli_fetch_array($nome_res);
+                    $fotoUsuario = mysqli_fetch_array(mysqli_query($connect, "SELECT foto from usuario where idusuario = $comentario[4];"));
                     //var_dump($intNota);
                     $st1 = "";
                     $st2 = "";
@@ -484,10 +487,10 @@
                         <div style="display: flex; width: 60vw; height: 20vh; background-color: #444444; border-radius: 150px; flex-direction: column;">
                             <div style="display: flex; flex-direction: row; ">
                                 <div>
-                                    <img src="../figures/perfil.png" style="width: 15vw; height: 20vh;">
+                                    <img src="$fotoUsuario[0]" style="width: 12vw; height: 20vh; border-radius: 100px;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bottom: 0px;">$nome[0]</p>
+                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p>
                                 </div>
                                 <div>
                                     <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;" >

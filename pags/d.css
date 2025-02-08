@@ -63,25 +63,21 @@
 
 
 }
-
-input:not(:checked) {
-    border-color: green;
- }
-
-
-/* oculta o radio */
-.icone:not(:checked) > input{
-    position:absolute;
+.icones2{
+    display: grid; 
+    grid-template-columns: auto auto auto auto;  
+    grid-row-gap: 2vh;
+}
+.icones > label > input{
+	position:absolute;
 	appearance: none;
- }
- 
- /* propriedades da imagem */
- input[name=icones] + img{
-   cursor: pointer;
-   border: 4px solid #000;
- }
- 
- /* altera a cor da borda */    
- .img > input:checked ~ label{
-    border-color: #30F519;
- }
+}
+.img {
+    border: 4px solid black;
+}
+.icones > input:checked + img{
+    border:  4px solid green;
+}
+
+
+

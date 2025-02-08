@@ -7,7 +7,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
         $blur = "blur(0px)";
     }
     if(!isset($displayFoto)){
-        $display = "none";
+        $displayFoto = "none";
         $blur = "blur(0px)";
     }
     if(!isset($$wallpaper)){
@@ -24,6 +24,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
  if(isset($_POST['btn-cadastrar'])):
     $erros = array();
     $loginDB = mysqli_escape_string($connect, $_POST['login']);
+    $_SESSION["loginDB"] = $loginDB; 
     $nome = $_POST["nome"];
     $login = $_POST["login"];
     $senha = MD5($_POST["senha"]);
@@ -62,7 +63,16 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
 
 
 <?php 
-
+    if(isset($_POST['btn-concluir'])){
+        $foto = "../figures/profile/img".$_POST["icone"].".png"; 
+        //var_dump($foto);
+        //var_dump($_SESSION["loginDB"]);
+        $email = $_SESSION["loginDB"];
+        $sqlInsertFoto = "UPDATE usuario set foto = '$foto' WHERE email = '$email'; ";
+        mysqli_query($connect, $sqlInsertFoto);
+        $display = "flex";
+        $blur = "blur(5px)";
+    }
 
 
 
@@ -75,7 +85,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet"  href="../estilos/cadastro.css" />
+    <link rel="stylesheet"  href="d.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Cadastro</title>
 </head>
@@ -157,28 +167,27 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
 
     </div>
 
-    <div class="janelaConcluido" style = "display: flex; margin-left: 17.5vw; width: 65vw; height: 70vh;">
+    <div class="janelaConcluido" style = "display: <?php echo $displayFoto?>; margin-left: 17.5vw; width: 65vw; height: 93vh; background-color:  #fcf7d1; margin-top: 5vh;">
 
         <p style = "font-size: 50px;">Escolha sua foto de perfil:</p>
-        
-        <div style = " display: grid; grid-template-columns: auto auto auto auto">
+        <form action="" method="POST" >
+            <div class="icones2">
+                
+                <?php for($i = 0 ; $i < 12 ; $i++)
+                    echo <<< card
+                    
+                        <label class="icones" title = "text" for = "img$i">
+                            <input type="radio" name="icone" id="img$i" value="$i" style="position:absolute; appearance: none;">
+                            <img class="img" src = "../figures/profile/img$i.png" style = "border-radius: 100px; width: 10vw; height: 20vh; margin-left: 20px; column-gap: 2vw;  cursor: pointer;"/>
+                        </label>
+                    card;
+                
+                
+                ?>
 
-            <?php for($i = 0 ; $i < 12 ; $i++)
-                echo <<< card
-
-                <img src = "../figures/profile/img$i.png" style = "width: 10vw; height: 20vh; margin-left: 20px;"/>
-
-                card;
-            
-            
-            ?>
-
-        </div>
-
-        
-
-       
-        <button onclick="location.href = '../index.php';">voltar</button>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; width: 65vw; height: 3vh;"><input type="submit" value="concluir" id="concluir" name="btn-concluir" ></div>
+        </form>
     </div>
 
     <div class="janelaConcluido" style = "display: <?php echo $display?>">
