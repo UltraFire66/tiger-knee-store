@@ -242,8 +242,8 @@
 
             
             <div style = "display: flex;flex-direction: column; margin-right: 25px">
-                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center" src="../figures/perfil.png" alt=""/>
-                <a href = "perfil.php" style = "text-decoration: none; color: black"><p style = " font-size: 20px; align-self: center"><?php echo $dados_usuario['nome']?></p></a>
+                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center; border-radius: 100%; margin-top:2vh;" src="<?php echo $dados_usuario["foto"]?>" alt=""/>
+                <p style = " font-size: 20px; align-self: center"><a href = "<?php echo "perfil.php?".$_SESSION["id_usuario"];?>" style = "text-decoration: none; color: black"><?php echo $dados_usuario["nome"]?></a></p>
             </div>
 
         </div>
@@ -411,7 +411,7 @@
                                     <img src="$fotoUsuario[0]" style="width: 12vw; height: 20vh; border-radius: 100px;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p>
+                                    <a href="perfil.php?$comentario[4]" style=" text-decoration: none;"><p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p></a>
                                 </div>
                                 <div>
                                     <div>
@@ -490,7 +490,7 @@
                                     <img src="$fotoUsuario[0]" style="width: 12vw; height: 20vh; border-radius: 100px;">
                                 </div>
                                 <div>
-                                    <p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p>
+                                    <a href="perfil.php?$comentario[4]" style=" text-decoration: none;"><p style="font-size:30px; margin-top:20px; color: black; margin-bot: 0px; margin-left: 2vw;">$nome[0]</p></a>
                                 </div>
                                 <div>
                                     <div class = "ratingComentario" style="width: 15vw; height: 10vh; margin-left: 2vw; margin-top: 15px;" >

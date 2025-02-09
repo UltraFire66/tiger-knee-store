@@ -6,12 +6,21 @@
     if(!isset($_SESSION['logado'])):
         header('Location: ../index.php');
     endif;
-
+    //pega id usuario
+    $string = $_SERVER["REQUEST_URI"];
+    $string = explode("?",$string);
+    $idU = $string[1];
+    //var_dump($id);
     $id = $_SESSION['id_usuario'];
     //var_dump($id);
-    $sql = "SELECT * FROM usuario WHERE idUsuario = '$id'";
+    $sql = "SELECT * FROM usuario WHERE idUsuario = '$idU'";
     $resultado = mysqli_query($connect, $sql);
-    $dados = mysqli_fetch_array($resultado);
+    $dadosU = mysqli_fetch_array($resultado);
+    $sql1 = "SELECT * FROM usuario WHERE idUsuario = '$id'";
+    $resultado1 = mysqli_query($connect, $sql1);
+    $dados1 = mysqli_fetch_array($resultado1);
+    //var_dump($dados1);
+    
 ?>
 
 
@@ -42,17 +51,23 @@
 
             
             <div style = "display: flex;flex-direction: column; margin-right: 25px">
-                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center" src="../figures/perfil.png" alt=""/>
-                <p style = " font-size: 20px; align-self: center"><a href="perfil.php" style="text-decoration: none;"><?php echo $dados['nome']; ?></a></p>
+                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center; border-radius: 100%; margin-top:2vh;" src="<?php echo $dados1["foto"]?>" alt=""/>
+                <p style = " font-size: 20px; align-self: center"><a href = "<?php echo "perfil.php?".$_SESSION["id_usuario"];?>" style = "text-decoration: none; color: black"><?php echo $dados1["nome"]?></a></p>
             </div>
 
         </div>
 
         <div style = "display: flex; flex-direction: row; justify-content: center;"> <!-- foto de perfil e nome -->
             <div class="card" style = "margin-top: 5%; background-color: #A9A17A"> 
-                <img src="../figures/goku.jpeg" alt="Imagem de Perfil" class="profile-img">
-                <div class="name"><?php echo $dados['nome'] ?></div>
-                <div class="description" style="margin-top:15px"><a href="../pags/editarperfil">Editar Perfil de Usuário</a></div>
+                <img src="<?php echo $dadosU['foto'] ?>" alt="Imagem de Perfil" class="profile-img">
+                <div class="name"><?php echo $dadosU['nome'] ?></div>
+                <?php 
+                    if($idU == $id){
+                        echo <<< editar
+                            <div class="description" style="margin-top:15px"><a href="../pags/editarperfil">Editar Perfil de Usuário</a></div>
+                        editar;
+                    }
+                ?>
             </div>
         </div>
     
@@ -61,72 +76,72 @@
         
         <?php 
         
-        $sql_avl = "SELECT * FROM interacao where idUsuario = '$id'";
-        $res = mysqli_query($connect, $sql_avl);
-        $avaliacao = mysqli_fetch_array($res);
-        $jogo = array();
-        while($avaliacao != NULL){        
-        $api = 'https://store.steampowered.com/api/appdetails?appids='.$avaliacao['idjogo'];
-        $jogo[$avaliacao['idjogo']] = json_decode(file_get_contents($api),true);
-        $imgjogo = $jogo[$avaliacao['idjogo']][$avaliacao['idjogo']]['data']['capsule_image'];
-        $codjogo = $avaliacao['idjogo'];
-        $nota = mysqli_query($connect, "SELECT nota from interacao WHERE (idjogo = $codjogo and idUsuario = $id)");
-        $evaristo = mysqli_fetch_array($nota);
-        $alex = $evaristo[0];
-        
-                            $st1 = "";
-                            $st2 = "";
-                            $st3 = "";
-                            $st4 = "";
-                            $st5 = "";
-                            
-                            switch(intval($alex)){
-                            case 1: 
-                                $st1 = "checked"; 
-                                break;
-                            case 2: 
-                                $st2 = "checked"; 
-                                break;
-                            case 3: 
-                                $st3 = "checked"; 
-                                break;
-                            case 4: 
-                                $st4 = "checked"; 
-                                break;
-                            case 5:
-                                $st5 = "checked"; 
-                                break;
-                            default;
-                        }
-        echo <<<avaliacoes
-            <div style = "display: flex; flex-direction: row; justify-content: center; margin-top: 5vh;"> <!-- 1 div pra cada avaliaçao mt lixo -->
-                <div style = "display: flex; flex-direction: column; align-items:flex-start; justify-content: center; max-width: 100%; margin-right: 2.5vw; margin-left: 2.5vw"><img src="$imgjogo" style="max-width:100%;"><div class = "ratingComentario" style = "align-self:center">
-                                                
-                                                    
-                                                    
-                                                        <input value = "5" name = "rate2.$codjogo" id = "star15.$codjogo" type = "radio" $st5>
-                                                        <label title =  "text"></label>
+            $sql_avl = "SELECT * FROM interacao where idUsuario = '$idU'";
+            $res = mysqli_query($connect, $sql_avl);
+            $avaliacao = mysqli_fetch_array($res);
+            $jogo = array();
+            while($avaliacao != NULL){        
+                $api = 'https://store.steampowered.com/api/appdetails?appids='.$avaliacao['idjogo'];
+                $jogo[$avaliacao['idjogo']] = json_decode(file_get_contents($api),true);
+                $imgjogo = $jogo[$avaliacao['idjogo']][$avaliacao['idjogo']]['data']['capsule_image'];
+                $codjogo = $avaliacao['idjogo'];
+                $nota = mysqli_query($connect, "SELECT nota from interacao WHERE (idjogo = $codjogo and idUsuario = $idU)");
+                $evaristo = mysqli_fetch_array($nota);
+                $alex = $evaristo[0];
+            
+                $st1 = "";
+                $st2 = "";
+                $st3 = "";
+                $st4 = "";
+                $st5 = "";
+                
+                switch(intval($alex)){
+                    case 1: 
+                        $st1 = "checked"; 
+                        break;
+                    case 2: 
+                        $st2 = "checked"; 
+                        break;
+                    case 3: 
+                        $st3 = "checked"; 
+                        break;
+                    case 4: 
+                        $st4 = "checked"; 
+                        break;
+                    case 5:
+                        $st5 = "checked"; 
+                        break;
+                    default;
+                }
+                echo <<<avaliacoes
+                    <div style = "display: flex; flex-direction: row; justify-content: center; margin-top: 5vh;"> <!-- 1 div pra cada avaliaçao mt lixo -->
+                        <div style = "display: flex; flex-direction: column; align-items:flex-start; justify-content: center; max-width: 100%; margin-right: 2.5vw; margin-left: 2.5vw"><img src="$imgjogo" style="max-width:100%;"><div class = "ratingComentario" style = "align-self:center">
+                                                        
+                                                            
+                                                            
+                                                                <input value = "5" name = "rate2.$codjogo" id = "star15.$codjogo" type = "radio" $st5>
+                                                                <label title =  "text"></label>
 
-                                                        <input value = "4" name = "rate2.$codjogo" id = "star14.$codjogo" type = "radio" $st4>
-                                                        <label title =  "text"></label>
+                                                                <input value = "4" name = "rate2.$codjogo" id = "star14.$codjogo" type = "radio" $st4>
+                                                                <label title =  "text"></label>
 
-                                                        <input value = "3" name = "rate2.$codjogo" id = "star13.$codjogo" type = "radio" $st3>
-                                                        <label title =  "text"></label>
+                                                                <input value = "3" name = "rate2.$codjogo" id = "star13.$codjogo" type = "radio" $st3>
+                                                                <label title =  "text"></label>
 
-                                                        <input value = "2" name = "rate2.$codjogo" id = "star12.$codjogo" type = "radio" $st2>
-                                                        <label title =  "text"></label>
+                                                                <input value = "2" name = "rate2.$codjogo" id = "star12.$codjogo" type = "radio" $st2>
+                                                                <label title =  "text"></label>
 
-                                                        <input value = "1" name = "rate2.$codjogo" id = "star11.$codjogo" type = "radio" $st1>
-                                                        <label title =  "text"></label>
-                                                    
-                                                
-                                            </div></div> 
-            </div>
-        
-        
-        avaliacoes;
-        $avaliacao = mysqli_fetch_array($res);
-        }
+                                                                <input value = "1" name = "rate2.$codjogo" id = "star11.$codjogo" type = "radio" $st1>
+                                                                <label title =  "text"></label>
+                                                            
+                                                        
+                                                    </div></div> 
+                    </div>
+            
+            
+                avaliacoes;
+                $avaliacao = mysqli_fetch_array($res);
+            }
         ?>
 
 
@@ -138,7 +153,7 @@
 
 
         <?php 
-            $sql_avl = "SELECT * FROM interacao where idUsuario = '$id'";
+            $sql_avl = "SELECT * FROM interacao where idUsuario = '$idU'";
             $res = mysqli_query($connect, $sql_avl);
             $comentario = mysqli_fetch_array($res);
             while($comentario != NULL){
@@ -156,5 +171,5 @@
     <div style="margin-top:10px;"></div>
 
 
-    </body>
+    </body>
 </html>

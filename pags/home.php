@@ -14,6 +14,7 @@
     $sql = "SELECT * FROM usuario WHERE idUsuario = '$id'";
     $resultado = mysqli_query($connect, $sql);
     $dados = mysqli_fetch_array($resultado);
+    //var_dump($dados);
     $sql = "SELECT * FROM pedido WHERE idUsuario = '$id' and comprado = 0";
     $resultado_carrinho = mysqli_query($connect, $sql);
     $carrinho = mysqli_fetch_array($resultado_carrinho);
@@ -52,15 +53,15 @@
 
 <?php
 
- $ids = array("39140","1126190","813780","366250","254460","587620","12200","323470");
- $_SESSION['idsJogos'] = $ids;
- $jogos = array();
- $para_carrinho = array();
-  foreach ($ids as $id){
-    $link = 'https://store.steampowered.com/api/appdetails?appids='.$id;
-    $jogos[] = json_decode(file_get_contents($link),true);
-    $para_carrinho[$id] = json_decode(file_get_contents($link),true);
-  }
+    $ids = array("39140","1126190","813780","366250","254460","587620","12200","323470");
+    $_SESSION['idsJogos'] = $ids;
+    $jogos = array();
+    $para_carrinho = array();
+    foreach ($ids as $id){
+        $link = 'https://store.steampowered.com/api/appdetails?appids='.$id;
+        $jogos[] = json_decode(file_get_contents($link),true);
+        $para_carrinho[$id] = json_decode(file_get_contents($link),true);
+    }
 
 
 ?>
@@ -96,8 +97,8 @@
             
 
             <div style = "display: flex;flex-direction: column; margin-right: 25px">
-                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center" src="../figures/perfil.png" alt=""/>
-                <a href = "perfil.php" style = "text-decoration: none; color: black"><p style = " font-size: 20px; align-self: center"><?php echo $dados['nome']?></p></a>
+                <img style="width: 5vw; height: 10vh; align-self: center; justify-self: center; border-radius: 100%; margin-top:2vh;" src="<?php echo $dados["foto"]?>" alt=""/>
+                <p style = " font-size: 20px; align-self: center"><a href = "<?php echo "perfil.php?".$_SESSION["id_usuario"];?>" style = "text-decoration: none; color: black"><?php echo $dados["nome"]?></a></p>
             </div>
 
         </div>
