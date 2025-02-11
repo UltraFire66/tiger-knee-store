@@ -29,7 +29,9 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     $login = $_POST["login"];
     $senha = MD5($_POST["senha"]);
     $cpf = $_POST["cpf"];
+    $cpfLimpo = preg_replace('/\D/', '', $cpf);
     $cep = $_POST["cep"];
+    $cepLimpo = preg_replace('/\D/', '', $cep);
     $estado = $_POST["estado"];
     $cidade = $_POST["cidade"];
     $rua = $_POST["rua"];
@@ -44,9 +46,11 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
             $erros[] = "<li>Esse login já existe.</li>";
         elseif($senha != $confirmasenha):
             $erros[] = "<li>As senhas digitadas não conferem.</li>";
+        elseif(filter_var($login, FILTER_VALIDATE_EMAIL)===false):
+            $erros[] = "<li>O email inserido não é válido.</li>";
         else:
             $sqlInsert = "INSERT INTO usuario(nome,email,senha,cpf,cep,estado,cidade,rua,numero) VALUES ('$nome',
-            '$login','$senha','$cpf','$cep','$estado','$cidade','$rua','$numero')";
+            '$login','$senha','$cpfLimpo','$cepLimpo','$estado','$cidade','$rua','$numero')";
             $insert = mysqli_query($connect, $sqlInsert); 
     if($insert){
         $displayFoto = "flex";
@@ -64,7 +68,11 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
 
 <?php 
     if(isset($_POST['btn-concluir'])){
-        $foto = "../figures/profile/img".$_POST["icone"].".png"; 
+        if(isset($_POST["icone"])){
+            $foto = "../figures/profile/img".$_POST["icone"].".png"; 
+        } else{
+            $foto = "../figures/profile/img.png"; 
+        }
         //var_dump($foto);
         //var_dump($_SESSION["loginDB"]);
         $email = $_SESSION["loginDB"];
@@ -88,6 +96,47 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
     <link rel="stylesheet"  href="d.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Cadastro</title>
+    <script type="text/javascript">
+        function mascaraCpf(cpf) {
+            cpf = cpf.replace(/\D/g, ""); // so deixa numero
+            
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+            return cpf;
+        }
+
+        function mascaraCep(cep) {
+            cep = cep.replace(/\D/g, ""); // so deixa numero
+            
+            cep = cep.replace(/(\d{5})(\d)/, "$1-$2");
+
+            return cep;
+        }
+
+
+        function aplicarMascaraCpf(input) {
+            let cpf = input.value;
+            input.value = mascaraCpf(cpf);
+        }
+
+        function aplicarMascaraCep(input) {
+            let cep = input.value;
+            input.value = mascaraCep(cep);
+        }
+
+        function validarNome(input) {
+            if (input.value.trim() === "") {
+                return;
+            }
+            var regex = /^[A-Za-zÀ-ÿ\s]+$/;
+            if (!regex.test(input.value)) {
+                alert("O nome não pode conter números ou caracteres especiais.");
+                input.value = input.value.replace(/[^A-Za-zÀ-ÿ\s]/g, "");
+            }
+        }
+    </script>
 </head>
 <body style = "
     
@@ -124,19 +173,19 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
                 <div style="display: flex; flex-direction: row; justify-content: center;">
                     <div class="inputs" style="">
-                        Nome: <input type="text" name="nome" id = "nome" style="display: flex; flex-direction: column; margin-top: 1px;">
-                        Email: <input type="text" name="login" id = "login" style="display: flex; flex-direction: column; margin-top: 1px;">
-                        CPF: <input type="text" name="cpf" id = "cpf" style="display: flex; flex-direction: column; margin-top: 1px;">
-                        CEP: <input type="text" name="cep" id = "cep" style="display: flex; flex-direction: column; margin-top: 1px;">
+                        Nome: <input type="text" name="nome" id = "nome" oninput="validarNome(this)" required style="display: flex; flex-direction: column; margin-top: 1px;">
+                        Email: <input type="text" name="login" id = "login" required style="display: flex; flex-direction: column; margin-top: 1px;">
+                        CPF: <input type="text" id="cpf" name="cpf" maxlength="14" oninput="aplicarMascaraCpf(this)" required style="display: flex; flex-direction: column; margin-top: 1px;">
+                        CEP: <input type="text" name="cep" id = "cep" minlength="9" maxlength="9" oninput="aplicarMascaraCep(this)" required style="display: flex; flex-direction: column; margin-top: 1px;">
                     </div>
                     <img style="width: 10vw; height: 20vh; margin-left: 20%" src="../figures/sf2zangief.gif" />
                 </div>
                 <div class="inputs" style="">
                     <div style="display: flex; flex-direction: row; justify-content: center; gap:18%;">
                         <div class="inputs" style="align-items:center;">
-                            Estado: <input type="text" name="estado" id = "estado" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Estado: <input type="text" name="estado" id = "estado" minlength="2" maxlength="2" style="display: flex; flex-direction: column; margin-top: 1px;">
                             Cidade: <input type="text" name="cidade" id = "cidade" style="display: flex; flex-direction: column; margin-top: 1px;">
-                            Senha: <input type="password" name="senha" id = "senha" style="display: flex; flex-direction: column; margin-top: 1px;">
+                            Senha: <input type="password" name="senha" id = "senha" minlength="6" maxlength="16" style="display: flex; flex-direction: column; margin-top: 1px;">
                         </div>
                         <div class="inputs" style="align-items:center;">
                             Número: <input type="text" name="numero" id = "numero" style="display: flex; flex-direction: column; margin-top: 1px;">
@@ -160,7 +209,7 @@ $wallpapers = array("../figures/sf6background.jpg","../figures/escorpio.jpg","..
                     endforeach;
                 endif;    
             ?>
-    </div>
+        </div>
     
 
     

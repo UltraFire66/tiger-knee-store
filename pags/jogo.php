@@ -56,15 +56,53 @@
 
         $sql_insert = "INSERT INTO pedido(quantidade,idjogo,idUsuario,comprado) values (1, $idJogo[1], $id,0);"; 
         $sql_update = "UPDATE pedido SET quantidade = quantidade + 1 WHERE (idUsuario = $id and comprado = 0 and idjogo = $idJogo[1]);";
-        $sql_select = "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);";
-        $r=mysqli_query($connect, $sql_select);
+        //$sql_select = "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);";
+        $sql_select = "SELECT * FROM compra WHERE (idUsuario = $id and comprado = 0);";
+        $r= mysqli_query($connect, $sql_select);
         $dados = mysqli_fetch_array($r);
 
 
         if($dados == NULL){
-            mysqli_query($connect, $sql_insert);
+            mysqli_query($connect, "INSERT INTO compra(idUsuario,comprado) values ( $id,0);");
+
+            $r=mysqli_query($connect, $sql_select);
+            $dados_compra = mysqli_fetch_array($r);
+            $idcompra = $dados_compra['codigo'];
+
+            mysqli_query($connect, "INSERT INTO pedido(quantidade,idjogo,idUsuario,comprado) values (1, $idJogo[1], $id,0);");
+
+            $r = mysqli_query($connect, "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);");
+            $dados_pedido = mysqli_fetch_array($r);
+            $idpedido = $dados_pedido['codigo'];
+
+            mysqli_query($connect, "INSERT INTO pedido_compra(codigoCompra,codigoPedido) values ($idcompra,$idpedido);");
+
+
         }else{
-            mysqli_query($connect, $sql_update);
+            $r = mysqli_query($connect, "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);");
+            $dados_pedido = mysqli_fetch_array($r);
+
+            if($dados_pedido == null){
+
+                $idcompra = $dados['codigo'];
+
+                mysqli_query($connect, "INSERT INTO pedido(quantidade,idjogo,idUsuario,comprado) values (1, $idJogo[1], $id,0);");
+
+                $r = mysqli_query($connect, "SELECT * FROM pedido WHERE (idUsuario = $id and idjogo = $idJogo[1] and comprado = 0);");
+                $dados_pedido = mysqli_fetch_array($r);
+                $idpedido = $dados_pedido['codigo'];
+    
+                mysqli_query($connect, "INSERT INTO pedido_compra(codigoCompra,codigoPedido) values ($idcompra,$idpedido);");
+
+            }
+
+            else{
+
+                mysqli_query($connect, $sql_update);
+
+            }
+
+            
         }
 
         header('Location:home.php');

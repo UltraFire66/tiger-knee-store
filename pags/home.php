@@ -15,6 +15,14 @@
     $resultado = mysqli_query($connect, $sql);
     $dados = mysqli_fetch_array($resultado);
     //var_dump($dados);
+
+    $r=mysqli_query($connect,"SELECT * FROM compra WHERE (idUsuario = $id and comprado = 0);");
+    $dados_compra = mysqli_fetch_array($r);
+    if($dados_compra != NULL){
+        $codigo_compra = $dados_compra['codigo'];
+    }
+
+
     $sql = "SELECT * FROM pedido WHERE idUsuario = '$id' and comprado = 0";
     $resultado_carrinho = mysqli_query($connect, $sql);
     $carrinho = mysqli_fetch_array($resultado_carrinho);
@@ -36,16 +44,30 @@
 <?php
 
     if (isset($_POST['btn-remover'])){
+
+        
+
         $id_remover = $_POST['remove'];
+        
+        mysqli_query($connect, "DELETE FROM pedido_compra WHERE codigoCompra = $codigo_compra and codigoPedido = (SELECT codigo from `pedido` where idUsuario = '$id' and idjogo  = $id_remover  )");
         $sql = "DELETE FROM pedido WHERE idUsuario = '$id' and comprado = 0 and idjogo = $id_remover";
         mysqli_query($connect, $sql);
+
+        $r =  mysqli_query($connect, "SELECT * FROM pedido WHERE idUsuario = '$id' and comprado = 0");
+        $dados_remover = mysqli_fetch_array($r);
+
+        if($dados_remover == NULL){
+            mysqli_query($connect, "DELETE FROM compra WHERE (idUsuario = $id and comprado = 0);");
+        }
+
 
     }
 
     if (isset($_POST['btn-comprar'])){
 
-        $sql = "DELETE FROM pedido WHERE idUsuario = '$id' and comprado = 0";
-        mysqli_query($connect, $sql);
+        mysqli_query($connect, "UPDATE compra SET comprado = 1 WHERE (idUsuario = $id and comprado = 0);");
+        mysqli_query($connect, "UPDATE pedido SET comprado = 1 WHERE (idUsuario = $id and comprado = 0);");
+
 
     }
 
